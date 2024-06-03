@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo Proyecto</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+</head>
+<body>
+{% include 'navbar.html' %}
+<div class="new-proyect-container">
+    {% if project %}
+        <h1>Editar Proyecto</h1>
+    {% else %}
+        <h1>Nuevo Proyecto</h1>
+    {% endif %}
+    {% if project %}
+        <form method="post" action="{% url 'editar_proyecto' project.id %}">
+    {% else %}
+        <form method="post" action="{% url 'nuevo_proyecto' %}">
+    {% endif %}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br>
+    <button type="submit" class="btn btn-primary">{% if project %}Guardar cambios{% else %}Agregar
+        proyecto{% endif %}</button>
+    </form>
+</div>
+</body>
+</html>

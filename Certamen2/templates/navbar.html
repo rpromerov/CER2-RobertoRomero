@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <img class="barra-colores" src="{% static 'BarraColores.png' %}" width="30" height="30"
+         class="d-inline-block align-top" alt="">
+    <a class="navbar-brand" href="#">PIE USM SVM</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#proyectos">Proyectos</a>
+            </li>
+            <li class="nav-item">
+                {% if user is not None %}
+                    <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
+                {% else %}
+                    <a class="nav-link" href="#login">Iniciar sesión</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</nav>
+</body>
+</html>

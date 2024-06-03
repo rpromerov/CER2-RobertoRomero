@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#filter").on("change", function () {
+                var selectedTema = $(this).val();
+                $("tbody tr").each(function () {
+                    var tema = $(this).find("td:eq(2)").text();
+                    if (tema === selectedTema || selectedTema === "All") {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+            $("#filterNoPatrocinio").on("change", function () {
+                var isChecked = $(this).is(":checked");
+                $("tbody tr").each(function () {
+                    var profesor = $(this).find("td:eq(3)").text();
+                    if ((isChecked && profesor === "None ") || !isChecked) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+
+    </script>
+</head>
+<body>
+<div class="project-container" id="proyectos">
+    <div class="col-12 project-header">
+        <h4>Portafolios</h4>
+        {% if user and user.role == '0' %}
+
+            <h2>Mis Proyectos</h2>
+        {% else %}
+            <h2>Proyectos Presentados</h2>
+        {% endif %}
+    </div>
+    <!-- Lista proyectos -->
+    <div class="table-responsive project-list">
+        {% if user and user.role == '1' %}
+            <div class="mb-3" style="margin-right: 5rem">
+                <input type="checkbox" id="filterNoPatrocinio">
+                <label for="filterNoPatrocinio">Mostrar proyectos sin Patrocinio</label>
+            </div>
+        {% endif %}
+
+        <div class="mb-3">
+            <label for="filter" class="form-label">Filtrar por tema</label>
+            <select class="form-select" id="filter">
+                <option selected>Todos</option>
+                {% for tema in temas %}
+                    <option value="{{ tema }}">{{ tema }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% if user and user.role == '0' %}
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary" href="/nuevo_proyecto">
+                    <a class="btn btn-primary" href="{% url 'nuevo_proyecto' %}">
+                        Nuevo Proyecto
+                    </a>
+                </button>
+            </div>
+        {% endif %}
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>NOMBRE PROYECTO</th>
+                <th>ESTUDIANTE</th>
+                <th>TEMA</th>
+                <th>PROFESOR</th>
+                {% if user %}
+                    <th>ACCIONES</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.nombre }}</td>
+                    <td>{{ project.estudiante }}</td>
+                    <td>{{ project.tema }}</td>
+                    <td>{{ project.profesor }} {% if user and project.profesor.id == user.id %} (Yo) {% endif %}</td>
+                    {% if user.role == '0' %}
+                        <td>
+
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-primary" href="{% url 'editar_proyecto' project.id %}">Editar</a>
+                                <form method="post" style="display: inline-block;"
+                                      action="{% url 'eliminar_proyecto' project.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    {% elif not project.profesor %}
+                        <td>
+                            <a class="btn btn-primary" href="{% url 'patrocinar_proyecto' project.id %}">Patrocinar</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</html>

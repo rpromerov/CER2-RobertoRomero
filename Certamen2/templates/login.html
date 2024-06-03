@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="login-container d-flex justify-content-center align-items-center" id="login">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% if user is not None %}
+                <div class="alert alert-success" role="alert">
+                    <b>Bienvenid@ {{ user.get_role_display }}</b> <br>{{ user.nombre }}
+                </div>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Cerrar sesión</button>
+                </form>
+            {% else %}
+
+                <h5 class="card-title text-center">Login</h5>
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Correo</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Acceder</button>
+                </form>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

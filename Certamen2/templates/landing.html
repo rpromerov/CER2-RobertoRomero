@@ -1,0 +1,15 @@
+{% extends 'home.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="image-container">
+        <img src="{% static 'svm.jpg' %}">
+        <div class="overlay-text">
+            <h2>Portal de Iniciativas Estudiantiles</h2>
+            <h4>Universidad Santa María - Sede Viña del Mar</h4>
+        </div>
+    </div>
+
+    {% include 'projectsList.html' %}
+    {% include 'login.html' %}
+{% endblock %}
