@@ -9,7 +9,7 @@
                 var selectedTema = $(this).val();
                 $("tbody tr").each(function () {
                     var tema = $(this).find("td:eq(2)").text();
-                    if (tema === selectedTema || selectedTema === "All") {
+                    if (tema === selectedTema || selectedTema === "Todos") {
                         $(this).show();
                     } else {
                         $(this).hide();
